@@ -1,9 +1,10 @@
 package net.dericbourg.sandbox.graph
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scalax.collection.Graph
-import scalax.collection.GraphPredef._
 import scalax.collection.GraphEdge._
+import scalax.collection.GraphPredef._
 
 object DijkstraWithPQ extends App {
 
@@ -34,7 +35,7 @@ object DijkstraWithPQ extends App {
   println("Edges")
   g.edges.foreach(println)
 
-  def dijkstra(graph: Graph[String, DiEdge], source: String): Unit = {
+  def dijkstra(graph: Graph[String, DiEdge], source: String): (Map[String, Double], Map[String, Option[String]]) = {
     val dist: mutable.Map[String, Double] = mutable.Map(source -> 0.0)
     val prev: mutable.Map[String, Option[String]] = mutable.Map()
 
@@ -60,9 +61,25 @@ object DijkstraWithPQ extends App {
       }
     } while (vertices.nonEmpty)
 
-    println("Distances")
-    println(dist)
+    (dist.toMap, prev.toMap)
   }
 
-  dijkstra(g, "A")
+  val (distances, previous) = dijkstra(g, "A")
+  println(previous)
+
+  def buildPath(prev: Map[String, Option[String]], to: String): Seq[String] = {
+    var current = to
+    val path = ListBuffer[String]()
+
+    do {
+      path += current
+      current = prev(current).get
+      println(path)
+    } while (current != "A") // Infinite-loop prone, yay \o/
+
+    path.reverse.toList
+  }
+
+  val pathToG = buildPath(previous, "G")
+  println(pathToG.mkString("A -> ", " -> ", " *"))
 }
