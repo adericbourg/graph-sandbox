@@ -67,19 +67,19 @@ object DijkstraWithPQ extends App {
   val (distances, previous) = dijkstra(g, "A")
   println(previous)
 
-  def buildPath(prev: Map[String, Option[String]], to: String): Seq[String] = {
+  def buildPath(prev: Map[String, Option[String]], from: String, to: String): Seq[String] = {
     var current = to
     val path = ListBuffer[String]()
 
     do {
       path += current
-      current = prev(current).get
+      current = prev(current).get // Not working for impossible paths
       println(path)
-    } while (current != "A") // Infinite-loop prone, yay \o/
+    } while (current != from) // Infinite-loop prone, yay \o/
 
     path.reverse.toList
   }
 
-  val pathToG = buildPath(previous, "G")
+  val pathToG = buildPath(previous, "A", "G")
   println(pathToG.mkString("A -> ", " -> ", " *"))
 }
