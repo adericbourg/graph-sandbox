@@ -7,7 +7,15 @@ import grph.path.ArrayListPath
 
 import scala.collection.mutable.ListBuffer
 
+/*
+ FIXME: Does not handle that kind of line
+ Eg: https://www.ratp.fr/plans-lignes/metro/7b
 
+         X -> X
+         ^    |
+         |    v
+ X - X - X <- X
+ */
 object GrphRealLineSample extends App {
 
   val g: Grph = new InMemoryGrph()
